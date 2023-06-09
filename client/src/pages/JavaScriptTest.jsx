@@ -38,10 +38,25 @@ export const getBookingsForWeek = (roomId, weekNo) => {
   return bookedTime;
 };
 
-getBookingsForWeek("A101", "today");
-
 function JavaScriptTest() {
-  return <div></div>;
+  console.log(
+    'getBookingsForWeek("A101", "today")',
+    getBookingsForWeek("A101", "today")
+  );
+  console.log(
+    'getBookingsForWeek("A101", "this week")',
+    getBookingsForWeek("A101", "this week")
+  );
+  console.log(
+    'getBookingsForWeek("A101", "next week")',
+    getBookingsForWeek("A101", "next week")
+  );
+
+  return (
+    <div className="flex justify-center items-center text-red-600 text-5xl font-extrabold">
+      OPEN CONSOLE
+    </div>
+  );
 }
 
 export default JavaScriptTest;
