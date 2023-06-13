@@ -11,7 +11,10 @@ function HomePage() {
     <div className="h-screen flex flex-col gap-4 justify-center items-center">
       {items.map((item, index) => {
         return (
-          <Link to={"/" + (index + 1)} key={index}>
+          <Link
+            to={"/" + (index + 1) + (index === 2 ? "/thisweek?roomId=" : "")}
+            key={index}
+          >
             <Button name={item.name} />
           </Link>
         );
