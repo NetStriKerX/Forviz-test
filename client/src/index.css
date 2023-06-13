@@ -25,7 +25,3 @@
   vertical-align: bottom;
 } */
 
-.radio input:checked + .name + .bar {
-  font-weight: 600;
-  border-color: #707fdd;
-}

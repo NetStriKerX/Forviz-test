@@ -21,6 +21,8 @@ export const getBookingsForWeek = (roomId, weekNo) => {
     diff = { start: 0, end: 7 };
   } else if (weekNo === "next week") {
     diff = { start: 7, end: 15 };
+  } else {
+    return [];
   }
   diff.start *= 60 * 60 * 24 * 1000;
   diff.end *= 60 * 60 * 24 * 1000;
