@@ -14,7 +14,9 @@ function FrontEndTest() {
   // console.log(roomId, weekNo);
   const [schedule, setSchedule] = useState(getBookingsForWeek(roomId, weekNo));
   const [page, setPage] = useState("this week");
-  const todaySchedule = getBookingsForWeek(roomId, "today");
+  const todaySchedule = getBookingsForWeek(roomId, "today").sort(
+    (a, b) => new Date(a.startTime) - new Date(b.startTime)
+  );
 
   const today = "2019-09-28 13:00:00";
   const todayArr = new Date(today)
@@ -67,43 +69,37 @@ function FrontEndTest() {
             </p>
           </div>
           <div className="flex flex-col gap-3">
-            {todaySchedule
-              .sort(
-                (a, b) =>
-                  new Date(a.startTime).getHours() -
-                  new Date(b.startTime).getHours()
-              )
-              .map((item, index) => {
-                return (
-                  <div className="flex flex-col">
-                    <div className="text-xs text-[#ffffff7d]">
-                      {new Date(item.startTime).getHours() +
-                        ":" +
-                        new Date(item.startTime)
-                          .getMinutes()
-                          .toString()
-                          .padStart(2, "0") +
-                        " - " +
-                        new Date(item.endTime).getHours() +
-                        ":" +
-                        new Date(item.endTime)
-                          .getMinutes()
-                          .toString()
-                          .padStart(2, "0")}
-                    </div>
-                    <div>{item.title}</div>
+            {todaySchedule.map((item, index) => {
+              return (
+                <div className="flex flex-col">
+                  <div className="text-xs text-[#ffffff7d]">
+                    {new Date(item.startTime).getHours() +
+                      ":" +
+                      new Date(item.startTime)
+                        .getMinutes()
+                        .toString()
+                        .padStart(2, "0") +
+                      " - " +
+                      new Date(item.endTime).getHours() +
+                      ":" +
+                      new Date(item.endTime)
+                        .getMinutes()
+                        .toString()
+                        .padStart(2, "0")}
                   </div>
-                );
-              })}
+                  <div>{item.title}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
         <div className="w-3/5 flex flex-col bg-white">
-          <div className="flex items-center h-[100px] bg-[#EFEEEC] shadow-lg">
+          <div className="flex items-center h-[100px] w-full bg-[#EFEEEC] shadow-lg">
             <label
               onClick={() => {
                 setPage("this week");
               }}
-              className="radio flex flex-col justify-between items-center px-4 text-center h-full"
+              className="radio flex flex-col justify-between items-center px-4 text-center h-[100px]"
             >
               <span
                 className={`name h-[75%] flex justify-center items-end ${
@@ -124,7 +120,7 @@ function FrontEndTest() {
               onClick={() => {
                 setPage("next week");
               }}
-              className="radio flex flex-col justify-between items-center px-4 text-center h-full"
+              className="radio flex flex-col justify-between items-center px-4 text-center h-[100px]"
             >
               <span
                 className={`name h-[75%] flex justify-center items-end ${
@@ -146,7 +142,7 @@ function FrontEndTest() {
               onClick={() => {
                 setPage("whole month");
               }}
-              className="radio flex flex-col justify-between items-center px-4 text-center h-full"
+              className="radio flex flex-col justify-between items-center px-4 text-center h-[100px]"
             >
               <span
                 className={`name h-[75%] flex justify-center items-end ${
@@ -164,7 +160,35 @@ function FrontEndTest() {
               ></div>
             </label>
           </div>
-          <div className=""></div>
+          <div className="relative bg-red-300 w-full h-full">
+            <div className="absolute border-l h-full ml-[8%] z-10"></div>
+            <div className="absolute z-20">
+              {schedule
+                .sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
+                .map((item, index) => {
+                  return (
+                    <div className="flex flex-col">
+                      <div className="text-xs text-[#ffffff7d]">
+                        {new Date(item.startTime).getHours() +
+                          ":" +
+                          new Date(item.startTime)
+                            .getMinutes()
+                            .toString()
+                            .padStart(2, "0") +
+                          " - " +
+                          new Date(item.endTime).getHours() +
+                          ":" +
+                          new Date(item.endTime)
+                            .getMinutes()
+                            .toString()
+                            .padStart(2, "0")}
+                      </div>
+                      <div>{item.title}</div>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
         </div>
       </div>
     </>
