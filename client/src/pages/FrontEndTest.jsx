@@ -7,11 +7,9 @@ function FrontEndTest() {
   const param = useParams();
   const location = useLocation();
   const weekNo = param.query?.replace("week", " week");
-  console.log(weekNo);
   const queryParams = new URLSearchParams(location.search);
   const [roomId, setRoomId] = useState(queryParams.get("roomId"));
-  // console.log(roomId);
-  // console.log(roomId, weekNo);
+
   const [schedule, setSchedule] = useState(getBookingsForWeek(roomId, weekNo));
   const [page, setPage] = useState("this week");
   const todaySchedule = getBookingsForWeek(roomId, "today").sort(
@@ -19,18 +17,12 @@ function FrontEndTest() {
   );
 
   const today = "2019-09-28 13:00:00";
-  const todayArr = new Date(today)
-    .toDateString("default", { weekday: "long" })
-    .split(" ");
   const options = { weekday: "long" };
+  const todayArr = new Date(today).toDateString("default", options).split(" ");
   const dayOfWeek = new Intl.DateTimeFormat("default", options).format(
     new Date(today)
   );
-
-  console.log(dayOfWeek);
-  console.log(todaySchedule);
-  console.log(schedule);
-  console.log(todayArr);
+  let date = new Date(today);
 
   useEffect(() => {
     navigate("/3/" + param.query + "?roomId=" + roomId);
@@ -71,7 +63,7 @@ function FrontEndTest() {
           <div className="flex flex-col gap-3">
             {todaySchedule.map((item, index) => {
               return (
-                <div className="flex flex-col">
+                <div className="flex flex-col" key={index}>
                   <div className="text-xs text-[#ffffff7d]">
                     {new Date(item.startTime).getHours() +
                       ":" +
@@ -160,15 +152,41 @@ function FrontEndTest() {
               ></div>
             </label>
           </div>
-          <div className="relative bg-red-300 w-full h-full">
+          <div className="relative bg-white w-full h-full">
             <div className="absolute border-l h-full ml-[8%] z-10"></div>
-            <div className="absolute z-20">
+            <div className="absolute z-20 w-full">
               {schedule
+                .filter(
+                  (x) =>
+                    new Date(x.startTime).getDate() ===
+                    new Date(x.endTime).getDate()
+                )
                 .sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
                 .map((item, index) => {
                   return (
-                    <div className="flex flex-col">
-                      <div className="text-xs text-[#ffffff7d]">
+                    <div className="flex flex-col w-full" key={index}>
+                      {date.getDate() === new Date(item.startTime).getDate() ? (
+                        <div className="bg-[#F7F7F7] pl-[15%] mt-10 w-full border-y border-[#ECECEC]">
+                          {new Date(today).getDate() === date.getDate()
+                            ? "Today"
+                            : new Date(today).getDate() + 1 === date.getDate()
+                            ? "Tomorrow"
+                            : ""}{" "}
+                          ({" "}
+                          {date
+                            .toUTCString()
+                            .split(" ")
+                            .filter((x, index) => index < 3)
+                            .join(" ")}
+                          )
+                          <div className="hidden">
+                            {date.setDate(date.getDate() + 1)}
+                          </div>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                      <div className="text-xs text-[#0000007d] pl-[15%] pt-6">
                         {new Date(item.startTime).getHours() +
                           ":" +
                           new Date(item.startTime)
@@ -183,7 +201,7 @@ function FrontEndTest() {
                             .toString()
                             .padStart(2, "0")}
                       </div>
-                      <div>{item.title}</div>
+                      <div className="pl-[15%]">{item.title}</div>
                     </div>
                   );
                 })}
