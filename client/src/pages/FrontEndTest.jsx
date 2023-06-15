@@ -15,6 +15,7 @@ function FrontEndTest() {
   const todaySchedule = getBookingsForWeek(roomId, "today").sort(
     (a, b) => new Date(a.startTime) - new Date(b.startTime)
   );
+  console.log(schedule);
 
   const today = "2019-09-28 13:00:00";
   const options = { weekday: "long" };
@@ -156,11 +157,6 @@ function FrontEndTest() {
             <div className="absolute border-l h-full ml-[8%] z-10"></div>
             <div className="absolute z-20 w-full">
               {schedule
-                .filter(
-                  (x) =>
-                    new Date(x.startTime).getDate() ===
-                    new Date(x.endTime).getDate()
-                )
                 .sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
                 .map((item, index) => {
                   return (
